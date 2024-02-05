@@ -1,5 +1,7 @@
 "use strict";
 const { Model } = require("sequelize");
+const { hashPassword } = require("../helpers/bcrypt")
+
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
     /**
@@ -9,11 +11,18 @@ module.exports = (sequelize, DataTypes) => {
      */
     static associate(models) {
       // define association here
+      // example
+      // User.hasMany(models.Post, { foreignKey: 'userId' });
     }
   }
   User.init(
     {
-      full_name: {
+      id: {
+        type: DataTypes.UUID,
+        defaultValue: DataTypes.UUIDV4,
+        primaryKey: true,
+      },
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
       },
@@ -24,33 +33,24 @@ module.exports = (sequelize, DataTypes) => {
         validate: {
           is: /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
         },
+        set(value) {
+          this.setDataValue('email', value.toLowerCase());
+        }
       },
       username: {
         type: DataTypes.STRING,
         unique: true,
         allowNull: false,
+        set(value) {
+          this.setDataValue('username', value.toLowerCase());
+        }
       },
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      profile_image_url: {
-        type: DataTypes.TEXT,
-        allowNull: false,
-        validate: {
-          isUrl: {
-            msg: "Must Be A Valid Url",
-          },
-        },
-      },
-      age: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-        validate: {
-          isNumeric: {
-            msg: "Must Be A Valid Integer",
-          },
-        },
+        set(value) {
+          this.setDataValue('password', hashPassword(value));
+        }
       },
       phone_number: {
         type: DataTypes.INTEGER,
@@ -65,6 +65,9 @@ module.exports = (sequelize, DataTypes) => {
     {
       sequelize,
       modelName: "User",
+      timestamps: true,
+      updatedAt: 'updated_at',
+      createdAt: 'created_at',
     }
   );
   return User;
