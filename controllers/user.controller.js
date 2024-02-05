@@ -43,7 +43,6 @@ exports.registerUser = async (req, res) => {
   try {
     const result = await UserService.createUser(req.body);
     result.token = result.data?.id ? generateToken({ id: result.data.id }) : null;
-    console.log(result.success);
     res.status(result.success.statusCode).json(result);
   } catch (error) {
     res.status(error.statusCode).json(error);
