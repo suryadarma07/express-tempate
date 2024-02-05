@@ -31,7 +31,7 @@ exports.loginUser = async (req, res) => {
       });
     }
 
-    const token = generateToken({ id: user.full_name, });
+    const token = generateToken({ id: user.id, });
 
     res.status(200).json({ token });
   } catch (error) {
