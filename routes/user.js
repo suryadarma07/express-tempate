@@ -8,5 +8,6 @@ router.post("/login", user.validateLoginBody, controller.loginUser);
 router.get("/", controller.index);
 router.get("/:id", controller.show);
 router.delete("/:id", controller.destroy);
+router.put("/:id", user.validateUpdateBody, controller.update);
 
 module.exports = router;

@@ -1,0 +1,14 @@
+{
+	"error": {
+        "internal_server_error": "Internal Server Error",
+		"login_error": "User login error",
+        "user_email_not_found": "User's with email {{email}} not found",
+        "user_not_found": "User not found"
+	},
+
+    "success": {
+        "user_created": "User Created",
+        "user_deleted": "User deleted successfully",
+        "user_updated": "User Updated"
+    }
+}

@@ -1,0 +1,11 @@
+{
+	"error": {
+		"login_error": "User gagal login",
+		"user_not_found": "error.user_not_found",
+		"user_email_not_found": "error.user_email_not_found"
+	},
+	"not_found": "not_found",
+	"success": {
+		"user_updated": "success.user_updated"
+	}
+}

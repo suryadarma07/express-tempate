@@ -1,15 +1,17 @@
 "use strict";
-const { hashPassword } = require("../helpers/bcrypt");
+const { hashPassword } = require("../helpers/argon");
+const argon = require("argon2");
+const { v4: uuidv4 } = require('uuid');
 
 module.exports = {
   async up(queryInterface, Sequelize) {
-    queryInterface.bulkInsert("Users", [
+    await queryInterface.bulkInsert("Users", [
       {
-        id: "0189a26d-ef64-09ce-bdb8-2c0c3c1ef5ec",
+        id: uuidv4(),
         name: "Express",
         username: "express",
         email: "express@gmail.com",
-        password: hashPassword('secret'),
+        password: await hashPassword('secret'),
         phone_number: "08231231231",
         created_at: new Date(),
         updated_at: new Date(),

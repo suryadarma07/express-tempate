@@ -29,3 +29,20 @@ exports.validateRegisterBody = async (req, res, next) => {
     next();
   }
 };
+
+exports.validateUpdateBody = async (req, res, next) => {
+  const schema = Joi.object().keys({
+    name: Joi.string().required(),
+    username: Joi.string().required(),
+    email: Joi.string().email().required(),
+    password: Joi.string().required(),
+    phone_number: Joi.string().required(),
+  })
+  if (schema.validate(req.body).error) {
+    res.json({
+      error: schema.validate(req.body).error.message,
+    });
+  } else {
+    next();
+  }
+};

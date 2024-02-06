@@ -1,6 +1,6 @@
 "use strict";
 const { Model } = require("sequelize");
-const { hashPassword } = require("../helpers/bcrypt")
+const { hashPassword } = require("../helpers/argon")
 
 module.exports = (sequelize, DataTypes) => {
   class User extends Model {
@@ -48,9 +48,6 @@ module.exports = (sequelize, DataTypes) => {
       password: {
         type: DataTypes.STRING,
         allowNull: false,
-        set(value) {
-          this.setDataValue('password', hashPassword(value));
-        }
       },
       phone_number: {
         type: DataTypes.INTEGER,
@@ -68,6 +65,16 @@ module.exports = (sequelize, DataTypes) => {
       timestamps: true,
       updatedAt: 'updated_at',
       createdAt: 'created_at',
+      hooks: {
+        beforeCreate: async (user) => {
+          user.password = await hashPassword(user.password);
+        },
+        beforeUpdate: async (user) => {
+          if (user.changed('password')) {
+            user.password = await hashPassword(user.password);
+          }
+        },
+      },
     }
   );
   return User;
